@@ -77,6 +77,14 @@
           color: #3D3D3D;
         }
         
+        .little{
+            font-family: georgia;
+            font-size: 10px;
+            line-height: 8px;
+            font-weight: normal;
+            color: #666666;            
+        }
+        
         .text {
             width: 920px;
             padding-left: 20px;
@@ -224,8 +232,6 @@
                     c.rank = i + 1;
                 });
             });
-            
-            console.log(data);
             
             function populationChart() {
                             var cityData = [
@@ -395,7 +401,6 @@
                             cityData.forEach(function(d) {
                                 d.data = data.filter(function(c) { return c.city === d.name; })
                             });
-                            console.log(cityData)
                             
                             var toolTip = d3.select(".chart2").append("div")
                                             .attr("class", "tooltip")
@@ -491,12 +496,14 @@
         <div class="text">
             <h2><b>Ranking the 20 largest cities over the last 150 years</b></h2>
             <p>Changes in the American economic landscape have led to shifts in population across the country. The industrial cities, whose populations rose high in the middle of the last century, are now crashing while suburb cities boom. <b><i>Hover</b></i> over the ranking lines to see the rise and fall of city sizes since 1850.</p>
+            <p class="little"><b>Source:</b> US census bureau.</p>
         </div>
         <div class="chart2"></div>
         <br/><hr>
             <div class="text">
         <h2>Population: <b>Boom & Bust</b></h2>
         <p>Cities of industry such as Detroit, Baltimore, Cleveland and Cincinnati have had dramatic population drops while super-suburbs San Jose, Phoenix and San Diego have seen precipitous population increases in recent decades. <b><i>Hover</b></i> over the population lines to see the rise and fall since 1850. <i>Note: New York, Los Angeles and Chicago leave frame because scale was set to best display fluctuations of smaller cities.</i></p>
+        <p class="little"><b>Source:</b> US census bureau.</p>
             </div>
         <div class="chart"></div>
         <br/>
@@ -511,7 +518,7 @@
             </div>
             <div class="third">
                 <h2><b>The New American City</h2>
-                <p>America's fastest-growing cities are super-suburbs, sprawling over wide spaces and built out rather than up. Phoenix, San Jose and Houston have less dense city centers than the country's older cities.</p>
+                <p>America's fastest-growing cities are super-suburbs, sprawling over wide spaces and built out rather than up. Phoenix, San Jose and Houston have less dense city centers than the country's older cities and are taking advantage of their room to grow.</p>
             </div>
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <p style="margin-left: 10px;"><i>By Sam Rolens</i>
