@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rise and Fall of American Cities</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+        
+        hr{
+            width: 1201;
+            background-color: #3D3D3D;
+            height: 2px;
+            line-height: 2px;
+            opacity: 0.3;
+        }
+        
+        h1{
+          font-family: georgia;
+          font-size: 38px;
+          line-height: 30px;
+          font-weight: normal;
+          color: white;
+        }
+        
+        .bottom{
+            position: relative;
+            width: 920px;
+            padding-left: 10px;
+            padding-top: 10px;
+            padding-right: 10px;
+        }
+        
+        .header{
+            background: #3D3D3D;
+            width: 992px;
+            margin-left: 5px;
+            margin-top: 5px;
+            padding: 10px;
+            padding-left: 20px;
+        }
+        
+        .first{
+            position: absolute;
+            width: 270px;
+            margin-left: 25px;
+            padding: 10px;
+        }
+        
+        .second{
+            position: absolute;
+            width: 270px;
+            margin-left: 360px;
+            padding: 10px;
+        }
+        
+        .third{
+            position: absolute;
+            width: 270px;
+            margin-left: 690px;
+            padding: 10px;
+        }
+        
+        h2{
+          font-family: georgia;
+          font-size: 18px;
+          line-height: 19px;
+          font-weight: normal;
+          color: #3D3D3D;
+        }
+        
+        p{
+          font-family: georgia;
+          font-size: 14px;
+          line-height: 18px;
+          font-weight: normal;
+          color: #3D3D3D;
+        }
+        
+        .text {
+            width: 920px;
+            padding-left: 20px;
+            padding-top: 10px;
+            padding-right: 10px;
+        }
+        
+        .project {
+            position: absolute;
+            width: 1020px;
+            margin-left: 5px;
+            padding-bottom: 5px;
+            border: 1px solid black;
+        }
+        
+        .chart{
+            padding: 10px;
+        }
+        
+        .chart2{
+            padding: 10px;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 150px;
+            height: 25px;
+            padding: 2px;
+            font: 18px georgia;
+            color: white;
+            background: #686868;
+            border: 1px;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        
+        .rank-line .fat {
+            stroke-opacity: 0;
+        }
+        
+        .rank-line:hover .fat{
+            stroke-opacity: 1;
+        }
+        
+        .rank-line .fat {
+            stroke-width: 10px;
+        }
+        
+        .rank-line {
+            fill: none;
+            stroke: red;
+            stroke-width: 1.5px;
+            stroke-opacity: 0.5;
+        }
+        
+        .rank-line:hover {
+            stroke-opacity: 1;
+        }
+        
+        .SFOline { stroke: #808080; }
+        .SJOline { stroke: #FF6600; stroke-width: 3px; opacity: 1; }
+        .DETline { stroke: #003333; stroke-width: 3px; opacity: 1; }
+        .DALline { stroke: #FF3300; stroke-width: 3px; opacity: 1; }
+        .INDline { stroke: #808080; }
+        .LAXline { stroke: #808080; }
+        .NYCline { stroke: #808080; }
+        .OAKline { stroke: #808080; }
+        .FTWline { stroke: #808080; }
+        .PHXline { stroke: #FF4500; stroke-width: 3px; opacity: 1; }
+        .SANline { stroke: #FFCC00; stroke-width: 3px; opacity: 1; }
+        .SDGline { stroke: #FF9900; stroke-width: 3px; opacity: 1; }
+        .BALline { stroke: #228B22; stroke-width: 3px; opacity: 1; }
+        .BOSline { stroke: #808080; }
+        .BUFline { stroke: #808080; }
+        .CHIline { stroke: #808080; }
+        .CINline { stroke: #808080; }
+        .MILline { stroke: #808080; }
+        .PHIline { stroke: #808080; }
+        .PHI2line { stroke: #228B22; stroke-width: 3px; opacity: 1; }
+        .STLline { stroke: #006400; stroke-width: 3px; opacity: 1; }
+        .JACline { stroke: #808080; }
+        .CLEline { stroke: #2E8B57; stroke-width: 3px; opacity: 1; }
+        .COLline { stroke: #808080; }
+        .CHRline { stroke: #808080; }
+        .ELPline { stroke: #808080; }
+        .MEMline { stroke: #808080; }
+        .PITline { stroke: #808080; }
+        .WSHline { stroke: #808080; }
+        .NOLline { stroke: #808080; }
+        .KANline { stroke: #808080; }
+        .SEAline { stroke: #808080; }
+        .PROline { stroke: #808080; }
+        .LOUline { stroke: #808080; }
+        .MINline { stroke: #808080; }
+        .NEKline { stroke: #808080; }
+        .HOUline { stroke: #FF8C00; stroke-width: 3px; opacity: 1; }
+                
+        .dot {
+          fill: #5F6062;
+          stroke: #5F6062;
+        }
+        
+        .domain {
+        	fill: none;
+        	stroke: #999999;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .tick line {
+        	stroke: #999999;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .tick {
+        	font-size: 10px;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .grid {
+          stroke: #999999;
+          opacity: 0.3;
+        }
+        
+        
+    </style>
+    
+    <script>
+        d3.csv("FullProjectData.csv", function(data){
+            
+//            console.log(data)
+            
+            data.forEach(function(d){ 
+                d.pop = +d.pop;
+            });
+            
+            var nested = d3.nest()
+                .key(function(d) { return d.year; }).sortValues(function(a, b){ return b.pop - a.pop; })
+                .entries(data);
+                
+            nested.forEach(function(y) {
+                y.values.forEach(function(c, i) {
+                    c.rank = i + 1;
+                });
+            });
+            
+            console.log(data);
+            
+            function populationChart() {
+                            var cityData = [
+                             {code: "SJO", name:"San Jose"},
+                             {code: "DET", name:"Detroit"},
+                             {code: "SFO", name:"San Francisco"},
+                             {code: "DAL", name:"Dallas"},
+                             {code: "IND", name:"Indianapolis"},
+                             {code: "LAX", name:"Los Angeles"},
+                             {code: "NYC", name:"New York"},
+                             {code: "FTW", name:"Fort Worth"},
+                             {code: "PHX", name:"Phoenix"},
+                             {code: "SAN", name:"San Antonio"},
+                             {code: "SDG", name:"San Diego"},
+                             {code: "BAL", name:"Baltimore"},
+                             {code: "BOS", name:"Boston"},
+                             {code: "BUF", name:"Buffalo"},
+                             {code: "CHI", name:"Chicago"},
+                             {code: "CIN", name:"Cincinnati"},
+                             {code: "CLE", name:"Cleveland"},
+                             {code: "MIL", name:"Milwaukee"},
+                             {code: "PHI2", name:"Philadelphia"},
+                             {code: "STL", name:"St. Louis"},
+                             {code: "JAC", name:"Jacksonville"},
+                             {code: "COL", name:"Columbus"},
+                             {code: "CHR", name:"Charlotte"},
+                             {code: "ELP", name:"El Paso"},
+                             {code: "MEM", name:"Memphis"},
+                             {code: "PIT", name:"Pittsburgh"},
+                             {code: "WSH", name:"Washington DC"},
+                             {code: "NOL", name:"New Orleans"},
+                             {code: "KAN", name:"Kansas City"},
+                             {code: "SEA", name:"Seattle"},
+                             {code: "PRO", name:"Providence"},
+                             {code: "LOU", name:"Louisville"},
+                             {code: "MIN", name:"Minneapolis"},
+                             {code: "NEK", name:"Newark"},
+                             {code: "HOU", name:"Houston"}
+                             
+                            ];
+                            cityData.forEach(function(d) {
+                                d.data = data.filter(function(c) { return c.city === d.name; })
+                            });
+                            
+                            
+                            var toolTip = d3.select(".chart").append("div")
+                                            .attr("class", "tooltip")
+                                            .style("opacity", 0);
+
+                            var margin = {top: 5, right: 5, bottom: 20, left: 25};
+                                width = 1000 - margin.left - margin.right,
+                                height = 400 - margin.top - margin.bottom;
+
+                            var svg = d3.select(".chart")
+                                        .append("svg")
+                                        .attr("width", width + margin.left + margin.right)
+                                        .attr("height", height + margin.top + margin.bottom)
+                                        .append("g")
+                                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                            var xScale = d3.scale.linear()
+                                        .domain([1845, 2010])
+                                    	.range([0, width]);
+
+                            var yScale = d3.scale.linear()
+                            	   	.domain([0, 2200000])
+                            	   	.range([height, 0]);
+                                    	   	
+                            var rankLine = d3.svg.line()
+                                .x(function(d) {return xScale(d.year); })
+                                .y(function(d) {return yScale(d.pop); })
+//                                .interpolate("step")
+
+                            var xAxis = d3.svg.axis()
+                                        	.tickFormat(function(d) {return d;})
+                                        	.scale(xScale);
+
+                            var yAxis = d3.svg.axis()
+                                            .tickFormat(function(d) {return d;})
+                                            .orient("left")
+                                            .scale(yScale)
+                                            .ticks(9)
+                                            .tickSize(width - margin.left - margin.right);
+
+                                            cityData.forEach(function(city) {
+                                                var g = svg.append("g")
+                                                .attr("class", "rank-line")
+                                                .on("mouseover", function(d,i) {
+                                                    toolTip
+                                                        .html(city.name)
+                                                        .style("left", 600 + "px")
+                                                        .style("top", 900 + "px")
+                                                        .style("opacity", 1);
+                                                })
+                                                
+                                                .on("mouseout", function(d) {
+                                                    toolTip
+                                                        .style("opacity", 0);
+                                                });
+
+                                                g.append("path")
+                                                    .attr("class", city.code + "line thin")
+                                                    .attr("d", rankLine(city.data));
+
+                                                g.append("path")
+                                                    .attr("class", city.code + "line fat")
+                                                    .attr("d", rankLine(city.data));
+                                            });
+
+                                            svg.append("rect")
+                                                .attr("width", width)
+                                                .attr("height", 30)
+                                                .attr("y", height)
+                                                .style("fill", "white")
+
+                                            svg.append("g")
+                                                .attr("class", "axis")
+                                               	.attr("transform", "translate(" + width + ", 0)")
+                                                .call(yAxis);
+
+                                            svg.append("g")
+                                                .attr("class", "axis")
+                                                .attr("transform", "translate(0, " + height + ")")
+                                                .call(xAxis);
+
+            }
+            populationChart();
+            
+            function rankChart() {
+                            var cityData = [
+                             {code: "SJO", name:"San Jose"},
+                             {code: "DET", name:"Detroit"},
+                             {code: "SFO", name:"San Francisco"},
+                             {code: "DAL", name:"Dallas"},
+                             {code: "IND", name:"Indianapolis"},
+                             {code: "LAX", name:"Los Angeles"},
+                             {code: "NYC", name:"New York"},
+                             {code: "FTW", name:"Fort Worth"},
+                             {code: "PHX", name:"Phoenix"},
+                             {code: "SAN", name:"San Antonio"},
+                             {code: "SDG", name:"San Diego"},
+                             {code: "BAL", name:"Baltimore"},
+                             {code: "BOS", name:"Boston"},
+                             {code: "BUF", name:"Buffalo"},
+                             {code: "CHI", name:"Chicago"},
+                             {code: "CIN", name:"Cincinnati"},
+                             {code: "CLE", name:"Cleveland"},
+                             {code: "MIL", name:"Milwaukee"},
+                             {code: "PHI", name:"Philadelphia"},
+                             {code: "STL", name:"St. Louis"},
+                             {code: "JAC", name:"Jacksonville"},
+                             {code: "COL", name:"Columbus"},
+                             {code: "CHR", name:"Charlotte"},
+                             {code: "ELP", name:"El Paso"},
+                             {code: "MEM", name:"Memphis"},
+                             {code: "PIT", name:"Pittsburgh"},
+                             {code: "WSH", name:"Washington DC"},
+                             {code: "NOL", name:"New Orleans"},
+                             {code: "KAN", name:"Kansas City"},
+                             {code: "SEA", name:"Seattle"},
+                             {code: "PRO", name:"Providence"},
+                             {code: "LOU", name:"Louisville"},
+                             {code: "MIN", name:"Minneapolis"},
+                             {code: "NEK", name:"Newark"},
+                             {code: "HOU", name:"Houston"}
+                            ];
+                            cityData.forEach(function(d) {
+                                d.data = data.filter(function(c) { return c.city === d.name; })
+                            });
+                            console.log(cityData)
+                            
+                            var toolTip = d3.select(".chart2").append("div")
+                                            .attr("class", "tooltip")
+                                            .style("opacity", 0);
+
+                            var margin = {top: 5, right: 5, bottom: 20, left: 5};
+                                width = 1000 - margin.left - margin.right,
+                                height = 450 - margin.top - margin.bottom;
+
+                            var svg = d3.select(".chart2")
+                                        .append("svg")
+                                        .attr("width", width + margin.left + margin.right)
+                                        .attr("height", height + margin.top + margin.bottom)
+                                        .append("g")
+                                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                            var xScale = d3.scale.linear()
+                                        .domain([1847, 2011])
+                                    	.range([0, width]);
+
+                            var yScale = d3.scale.linear()
+                                    	   	.domain([20, 1])
+                                    	   	.range([height, 0]);
+                                    	   	
+                    	    var rankLine = d3.svg.line()
+                                .x(function(d) {return xScale(d.year); })
+                                .y(function(d) {return yScale(d.rank); })
+//                                .interpolate("bundle");
+
+                            var xAxis = d3.svg.axis()
+                                .tickFormat(function(d) {return d;})
+                            	.scale(xScale)
+                            	.ticks(15);
+
+                            var yAxis = d3.svg.axis()
+                                .tickFormat(function(d) {return d;})
+                                .orient("left")
+                                .scale(yScale)
+                                .ticks(20)
+                                .tickSize(width - margin.left - margin.right);
+                                        
+                            cityData.forEach(function(city) {
+                                var g = svg.append("g")
+                                .attr("class", "rank-line")
+                                .on("mouseover", function(d,i) {
+                                    toolTip
+                                        .html(city.name)
+                                        .style("left", d3.event.x + "px")
+                                        .style("top", d3.event.y + "px")
+                                        .style("opacity", 1);
+                                })
+                                .on("mouseout", function(d) {
+                                    toolTip
+                                        .style("opacity", 0);
+                                });
+                                
+                                g.append("path")
+                                    .attr("class", city.code + "line thin")
+                                    .attr("d", rankLine(city.data));
+                                    
+                                g.append("path")
+                                    .attr("class", city.code + "line fat")
+                                    .attr("d", rankLine(city.data));
+                            });
+                            
+                            svg.append("rect")
+                                .attr("width", width)
+                                .attr("height", 30)
+                                .attr("y", height)
+                                .style("fill", "white")
+                            
+                            svg.append("g")
+                                .attr("class", "axis")
+                               	.attr("transform", "translate(" + width + ", 0)")
+                                .call(yAxis);
+
+                            svg.append("g")
+                                .attr("class", "axis")
+                                .attr("transform", "translate(0, " + height + ")")
+                                .call(xAxis);
+            }
+            rankChart();
+        });
+        
+    
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1><b>Suburbanization</b>: <i>Shifts in America's mightiest cities</i></h1>
+    </div>
+    <div class="project">
+        <div class="text">
+            <h2><b>Ranking the 20 largest cities over the last 150 years</b></h2>
+            <p>Changes in the American economic landscape have led to shifts in population across the country. The industrial cities, whose populations rose high in the middle of the last century, are now crashing while suburb cities boom. <b><i>Hover</b></i> over the ranking lines to see the rise and fall of city sizes since 1850.</p>
+        </div>
+        <div class="chart2"></div>
+        <br/><hr>
+            <div class="text">
+        <h2>Population: <b>Boom & Bust</b></h2>
+        <p>Cities of industry such as Detroit, Baltimore, Cleveland and Cincinnati have had dramatic population drops while super-suburbs San Jose, Phoenix and San Diego have seen precipitous population increases in recent decades. <b><i>Hover</b></i> over the population lines to see the rise and fall since 1850. <i>Note: New York, Los Angeles and Chicago leave frame because scale was set to best display fluctuations of smaller cities.</i></p>
+            </div>
+        <div class="chart"></div>
+        <br/>
+        <div class="bottom">
+            <div class="first">
+                <h2><b>Crashing Industry</h2>
+                <p>It's been a hard half century for the rust belt. As US manufacturing continues to drop, jobs have dried up in America's working class metropolises. Population has dropped with unemployment rates: <i>16% in Detroit, 11% in Philadelphia, 10% in Baltimore compared to the national 7%.</i></p>
+            </div>
+            <div class="second">
+                <h2><b>Suburban Flight</h2>
+                <p>Not only are some urban areas dying due to joblessness, populations have been shifting out of city centers for the last 50 years. Suburbs surrounding cities have swelled, leaching numbers away from urban centers. Some metropolitan areas' population has risen as city populations plummet.</p>
+            </div>
+            <div class="third">
+                <h2><b>The New American City</h2>
+                <p>America's fastest-growing cities are super-suburbs, sprawling over wide spaces and built out rather than up. Phoenix, San Jose and Houston have less dense city centers than the country's older cities.</p>
+            </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <p style="margin-left: 10px;"><i>By Sam Rolens</i>
+        </div>    
+    </div>
+</body>
+</html>
